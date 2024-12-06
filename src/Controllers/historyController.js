@@ -3,7 +3,7 @@ import OneModeModel from "../Models/History-Model.js";
 const modeConfig = {
   INITIALIZATION_MODE: {
     modeName:"Initialization", 
-    fields: ["mode", "emailId", "robotId", "position", "orientation","status"],
+    fields: ["mode", "emailId", "robotId","subLocation", "position", "orientation","status"],
     model: OneModeModel,
   },
   MANUAL_MODE: {
