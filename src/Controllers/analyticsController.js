@@ -8,6 +8,7 @@ export const saveRobotAnalytics = async (req, res) => {
       emailId,
       model,
       batteryPercentage,
+      motordistanceCovered,
       analytics: {
         batteryRunningTime: { startingTime: batteryStartTime, endingTime: batteryEndTime },
         motorRunningTime: { startingTime: motorStartTime, endingTime: motorEndTime },
@@ -22,6 +23,7 @@ export const saveRobotAnalytics = async (req, res) => {
       emailId,
       model,
       batteryPercentage,
+      motordistanceCovered,
       analytics: {
         batteryRunningTime: {
           startingTime: batteryStartTime,

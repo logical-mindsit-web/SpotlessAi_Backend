@@ -45,6 +45,10 @@ const RobotAnalyticsSchema = new MongooseSchema({
     type: Number,
     required: true,
   },
+  motordistanceCovered: { 
+    type: Number, 
+    required: true,
+  },
   date: {
     type: Date,
     default: Date.now,
