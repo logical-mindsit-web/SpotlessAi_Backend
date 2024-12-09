@@ -75,21 +75,27 @@ export const singleFiveModeApi = async (req, res) => {
 // get history 
 export const getModeRobotId = async (req, res) => {
   try {
-
     const { robotId } = req.query;
- 
+
+    // Check if the database is empty
+    const allData = await OneModeModel.find();
+    if (allData.length === 0) {
+      return res.status(200).json({ message: "No robot data available in the system.", data: [] });
+    }
+
+    // If robotId is not provided
     if (!robotId) {
       return res.status(400).json({ message: "Missing robotId parameter." });
     }
 
+    // Check for data specific to the provided robotId
     const modes = await OneModeModel.find({ robotId });
-
     if (modes.length === 0) {
-      return res.status(200).json({ message: "No data for your robots." });
+      return res.status(200).json({ message: "No history for your robots.", data: [] });
     }
 
+    // Data found for the provided robotId
     return res.status(200).json({ message: "Modes retrieved successfully.", data: modes });
-
   } catch (error) {
     console.error("Error retrieving modes:", error);
     return res.status(500).json({ message: "Server error.", error: error.message });
