@@ -85,7 +85,7 @@ export const getModeRobotId = async (req, res) => {
     const modes = await OneModeModel.find({ robotId });
 
     if (modes.length === 0) {
-      return res.status(404).json({ message: `No modes found for robotId "${robotId}".` });
+      return res.status(200).json({ message: "No data for your robots." });
     }
 
     return res.status(200).json({ message: "Modes retrieved successfully.", data: modes });
