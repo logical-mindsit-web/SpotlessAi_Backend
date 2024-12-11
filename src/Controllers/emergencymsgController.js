@@ -34,7 +34,7 @@ export const createRobotmsg = async (req, res) => {
 
     // Send email with the robot message details and image attachment
     await robotemail(
-    "sithusiva29@gmail.com",
+    "logicalmindsit.careers@gmail.com",
       robotId,
       emailId,
       message,
