@@ -18,7 +18,21 @@ export const saveRobotAnalytics2 = async (req, res) => {
       uvLightUsageInSeconds,
       motorRuntimeInSeconds,
       distanceTravelledInMeters,
+      uvLightTimes,
+      motionDetectionTimes,
     } = req.body;
+
+    // Validate motionDetectionTimes structure to allow either resumeTime or abortedTime
+    if (motionDetectionTimes) {
+      for (const entry of motionDetectionTimes) {
+        if (entry.resumeTime && entry.abortedTime) {
+          return res.status(400).json({
+            message:
+              "Each motion detection entry must have either 'resumeTime' or 'abortedTime', but not both.",
+          });
+        }
+      }
+    }
 
     // Create a new instance of RobotAnalytics
     const robotAnalytics = new RobotAnalytics({
@@ -37,6 +51,8 @@ export const saveRobotAnalytics2 = async (req, res) => {
       uvLightUsageInSeconds,
       motorRuntimeInSeconds,
       distanceTravelledInMeters,
+      uvLightTimes,
+      motionDetectionTimes,
     });
 
     // Save the data to the database

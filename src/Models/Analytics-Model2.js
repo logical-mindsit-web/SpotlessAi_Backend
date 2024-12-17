@@ -1,11 +1,5 @@
 import { Schema as MongooseSchema, model } from "mongoose";
 
-// Regular expression to validate hh:mm:ss format in 24-hour time
-const timeRegex = /^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/;
-
-// Reusable time validation function
-const validateTime = (value) => timeRegex.test(value);
-
 const RobotAnalyticsSchema = new MongooseSchema({
   robotId: {
     type: String,
@@ -35,20 +29,12 @@ const RobotAnalyticsSchema = new MongooseSchema({
     enum: ["completed", "Partial"], // Status can only be "completed" or "Partial"
   },
   disinfectionStartTime: {
-    type: String,
+    type: Date,
     required: true,
-    validate: {
-      validator: validateTime,
-      message: (props) => `${props.value} is not a valid time format (hh:mm:ss)!`,
-    },
   },
   disinfectionEndTime: {
-    type: String,
+    type: Date,
     required: true,
-    validate: {
-      validator: validateTime,
-      message: (props) => `${props.value} is not a valid time format (hh:mm:ss)!`,
-    },
   },
   disinfectionTimeTakenSeconds: {
     type: Number, // Time taken in seconds
@@ -70,7 +56,52 @@ const RobotAnalyticsSchema = new MongooseSchema({
     type: Number, // Distance in meters, supports decimal values
     required: true,
   },
-});
+  uvLightTimes: {
+    type: [
+      {
+        startTime: {
+          type: Date,
+          required: true,
+        },
+        endTime: {
+          type: Date,
+          required: true,
+        },
+      },
+    ],
+    required: true,
+  },
+  motionDetectionTimes: {
+    type: [
+      {
+        detectedTime: {
+          type: Date,
+          required: true,
+        },
+        resumeTime: {
+          type: Date, 
+        },
+        abortedTime: {
+          type: Date, 
+        },
+      },
+    ],
+    validate: {
+      validator: function (values) {
+        return values.every(
+          (entry) =>
+            (entry.resumeTime && !entry.abortedTime) ||
+            (!entry.resumeTime && entry.abortedTime)
+        );
+      },
+      message:
+        "Each motion detection event must have either resumeTime or abortedTime, but not both.",
+    },
+    required: true,
+  },
+},
+{ timestamps: true }
+);
 
 const RobotAnalytics = model("RobotAnalytics-2", RobotAnalyticsSchema);
 
